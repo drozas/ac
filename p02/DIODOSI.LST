@@ -1,0 +1,108 @@
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 1  
+
+  
+
+		Fichero fuente    : DIODOSI.ASM
+		Fichero objeto    : DIODOSI.OBJ
+		Fichero de listado: DIODOSI.LST
+
+PRIMERA PASADA:
+
+
+SEGUNDA PASADA:
+
+1   : 0000 0000 :                : *                SYMBOLS
+2   : 0000 0000 :                :  		ORG	$2000
+3   : 0000 2000 :                : 
+4   : 0000 2000 :                : ***************************************
+5   : 0000 2000 :                : * ZONA DE DATOS GLOBALES DEL PROGRAMA
+6   : 0000 2000 :                : ***************************************
+7   : 0000 2000 :                : VIA_1		EQU	$60021
+8   : 0000 2000 :                : ORB		EQU	VIA_1+0
+9   : 0000 2000 :                : ORA		EQU	VIA_1+2
+10  : 0000 2000 :                : DDRB		EQU	VIA_1+4
+11  : 0000 2000 :                : DDRA		EQU	VIA_1+6
+12  : 0000 2000 :                : T1CL		EQU	VIA_1+8
+13  : 0000 2000 :                : T1CH		EQU	VIA_1+10
+14  : 0000 2000 :                : T1LL		EQU	VIA_1+12
+15  : 0000 2000 :                : T1LH		EQU	VIA_1+14
+16  : 0000 2000 :                : T2LL		EQU	VIA_1+16
+17  : 0000 2000 :                : T2CH		EQU	VIA_1+18
+18  : 0000 2000 :                : SR		EQU	VIA_1+20
+19  : 0000 2000 :                : ACR		EQU	VIA_1+22
+20  : 0000 2000 :                : PCR		EQU	VIA_1+24
+21  : 0000 2000 :                : IFR		EQU	VIA_1+26
+22  : 0000 2000 :                : IER		EQU	VIA_1+28
+23  : 0000 2000 :                : ORAE		EQU	VIA_1+30
+24  : 0000 2000 :                : 
+25  : 0000 2000 :                : ***************************************
+26  : 0000 2000 :                : * PROGRAMA PRINCIPAL
+27  : 0000 2000 :                : ***************************************
+28  : 0000 2000 :                : 
+29  : 0000 2000 :                : *Configuro la VIA
+30  : 0000 2000 : 13FC 0011 0006 : INICIO		MOVE.B	#$11,PCR	*Activamos los bits 0 y 4 introduciendo un 1, para que se active por flanco de subida
+                : 0039 
+31  : 0000 2008 : 13FC 0082 0006 : 		MOVE.B	#$82,IER	*Configuración de IER: ponemos un 1 en el bit 7 (hace que se pongan a 1 todos los bits de IER que tengan un uno en el byte) y otro en el bit 1 (para CA1)
+                : 003D 
+32  : 0000 2010 :                : 		
+33  : 0000 2010 : 143C 0000      : 		MOVE.B	#$0,D2		*Iniciamos los bits menos significativos de D2 a 0
+34  : 0000 2014 : 5282           : BUCINF		ADDQ.L	#1,D2		*Hacemos una operacion de suma
+35  : 0000 2016 : 243C 0000 0000 : 		MOVE.L	#0,D2		*Y volvemos a iniciar a 0, para evitar problemas de desbordamiento.
+36  : 0000 201C : 60F6           : 		BRA 	BUCINF
+37  : 0000 201E : 4E72 2000      : 		STOP	#$2000		
+38  : 0000 2022 :                : ***************************************
+39  : 0000 2022 :                : * TRATAMIENTO DE LA SUBRUTINA
+40  : 0000 2022 :                : ***************************************
+
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 2  
+
+  
+
+41  : 0000 2022 :                : 
+42  : 0000 2022 : 13FC 00F0 0006 : INTER		MOVE.B	#$F0,DDRA       *Los bits del 0 al 3 son de entrada, y los del 4 al 7 de salida (a los leds)
+                : 0027 
+43  : 0000 202A : 48E7 FF00      : 		MOVEM.L	D0-D7,-(A7)	*Salvaguardamos los datos en la pila
+44  : 0000 202E : 123C 0000      : 		MOVE.B	#0,D1		*Movemos 0 a D1
+45  : 0000 2032 : 103C 0000      :                 MOVE.B  #0,D0           *Y 0 a D0
+46  : 0000 2036 : 1039 0006 0023 : 		MOVE.B	ORA,D0		*Leemos el estado de los conmutadores
+47  : 0000 203C : 0880 0007      : 		BCLR	#7,D0		*Borrado de los bits del 4 al 7 de D0
+48  : 0000 2040 : 0880 0006      : 		BCLR	#6,D0
+49  : 0000 2044 : 0880 0005      : 		BCLR	#5,D0
+50  : 0000 2048 : 0880 0004      : 		BCLR	#4,D0
+51  : 0000 204C : 123C 0000      : 		MOVE.B	#0,D1		*Movemos 0 a los bits de menor peso de D1
+52  : 0000 2050 : 1200           : 		MOVE.B	D0,D1		*Movemos D0 a D1
+53  : 0000 2052 : E959           : 		ROL	#4,D1		*Rotación
+54  : 0000 2054 : 13C1 0006 0023 :                 MOVE.B  D1,ORA          *Salida en ORA del contenido (a los leds)
+55  : 0000 205A : 4CDF 00FF      : 		MOVEM.L	(A7)+,D0-D7	*Restituimos los valores salvaguardados en la pila
+56  : 0000 205E : 4E73           : 		RTE			*Vuelta de la subrutina
+57  : 0000 2060 :                :                 END
+
+   Lineas ensambladas:    57   Errores: 0
+
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 3  
+
+  
+TABLA DE SIMBOLOS:
+
+
+ACR             : 0006 0037 : LOCAL ABSOLUTA
+BUCINF          : 0000 2014 : LOCAL REUBICABLE
+DDRA            : 0006 0027 : LOCAL ABSOLUTA
+DDRB            : 0006 0025 : LOCAL ABSOLUTA
+IER             : 0006 003D : LOCAL ABSOLUTA
+IFR             : 0006 003B : LOCAL ABSOLUTA
+INICIO          : 0000 2000 : LOCAL REUBICABLE
+INTER           : 0000 2022 : LOCAL REUBICABLE
+ORA             : 0006 0023 : LOCAL ABSOLUTA
+ORAE            : 0006 003F : LOCAL ABSOLUTA
+ORB             : 0006 0021 : LOCAL ABSOLUTA
+PCR             : 0006 0039 : LOCAL ABSOLUTA
+SR              : 0006 0035 : LOCAL ABSOLUTA
+T1CH            : 0006 002B : LOCAL ABSOLUTA
+T1CL            : 0006 0029 : LOCAL ABSOLUTA
+T1LH            : 0006 002F : LOCAL ABSOLUTA
+T1LL            : 0006 002D : LOCAL ABSOLUTA
+T2CH            : 0006 0033 : LOCAL ABSOLUTA
+T2LL            : 0006 0031 : LOCAL ABSOLUTA
+VIA_1           : 0006 0021 : LOCAL ABSOLUTA
+

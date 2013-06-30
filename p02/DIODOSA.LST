@@ -1,0 +1,31 @@
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 1  
+
+  
+
+		Fichero fuente    : DIODOSA.ASM
+		Fichero objeto    : DIODOSA.OBJ
+		Fichero de listado: DIODOSA.LST
+
+PRIMERA PASADA:
+
+
+SEGUNDA PASADA:
+
+1   : 0000 0000 :                : ***************************************
+2   : 0000 0000 :                : * ZONA DE ASIGNACION DE INTERRUPCIONES
+3   : 0000 0000 :                : ***************************************
+4   : 0000 0000 :                : 		ORG	$2003C
+5   : 0002 003C :                : INTER		EQU	$22062
+6   : 0002 003C : 6000 2024      : 		BRA	INTER
+7   : 0002 0040 :                : 		END
+
+   Lineas ensambladas:     7   Errores: 0
+
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 2  
+
+  
+TABLA DE SIMBOLOS:
+
+
+INTER           : 0002 2062 : LOCAL ABSOLUTA
+

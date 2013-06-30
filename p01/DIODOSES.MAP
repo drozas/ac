@@ -1,0 +1,30 @@
+
+  M¢dulo    Nombre                          Segmento  Inicio     Fin
+========================================================================
+   01    DIODOSES.OBJ                           1    00000000  00025039
+
+
+
+         LISTADO DE ETIQUETAS 
+Tipo     M¢dulo  Etiqueta                  Valor
+==================================================
+LOCAL      01    ACR                      00060037
+LOCAL      01    BUCLE_WHILE              00025010
+LOCAL      01    DDRA                     00060027
+LOCAL      01    DDRB                     00060025
+LOCAL      01    FIN_PROGRAMA             0002502E
+LOCAL      01    IER                      0006003D
+LOCAL      01    IFR                      0006003B
+LOCAL      01    INICIO                   00025000
+LOCAL      01    ORA                      00060023
+LOCAL      01    ORAE                     0006003F
+LOCAL      01    ORB                      00060021
+LOCAL      01    PCR                      00060039
+LOCAL      01    SR                       00060035
+LOCAL      01    T1CH                     0006002B
+LOCAL      01    T1CL                     00060029
+LOCAL      01    T1LH                     0006002F
+LOCAL      01    T1LL                     0006002D
+LOCAL      01    T2CH                     00060033
+LOCAL      01    T2LL                     00060031
+LOCAL      01    VIA_2                    00060021

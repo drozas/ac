@@ -1,0 +1,99 @@
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 1  
+
+  
+
+		Fichero fuente    : DIODOSES.ASM
+		Fichero objeto    : DIODOSES.OBJ
+		Fichero de listado: DIODOSES.LST
+
+PRIMERA PASADA:
+
+
+SEGUNDA PASADA:
+
+1   : 0000 0000 :                : *               SYMBOLS
+2   : 0000 0000 :                : 		ORG	$25000
+3   : 0002 5000 :                : 
+4   : 0002 5000 :                : ***************************************
+5   : 0002 5000 :                : * 1. Declarar Variables (datos)
+6   : 0002 5000 :                : ***************************************
+7   : 0002 5000 :                : VIA_2		EQU	$60021
+8   : 0002 5000 :                : ORB		EQU	VIA_2+0
+9   : 0002 5000 :                : ORA		EQU	VIA_2+2
+10  : 0002 5000 :                : DDRB		EQU	VIA_2+4
+11  : 0002 5000 :                : DDRA		EQU	VIA_2+6
+12  : 0002 5000 :                : T1CL		EQU	VIA_2+8
+13  : 0002 5000 :                : T1CH		EQU	VIA_2+10
+14  : 0002 5000 :                : T1LL		EQU	VIA_2+12
+15  : 0002 5000 :                : T1LH		EQU	VIA_2+14
+16  : 0002 5000 :                : T2LL		EQU	VIA_2+16
+17  : 0002 5000 :                : T2CH		EQU	VIA_2+18
+18  : 0002 5000 :                : SR		EQU	VIA_2+20
+19  : 0002 5000 :                : ACR		EQU	VIA_2+22
+20  : 0002 5000 :                : PCR		EQU	VIA_2+24
+21  : 0002 5000 :                : IFR		EQU	VIA_2+26
+22  : 0002 5000 :                : IER		EQU	VIA_2+28
+23  : 0002 5000 :                : ORAE		EQU	VIA_2+30
+24  : 0002 5000 :                : 
+25  : 0002 5000 :                : ***************************************
+26  : 0002 5000 :                : * PROGRAMA PRINCIPAL
+27  : 0002 5000 :                : ***************************************
+28  : 0002 5000 :                : 
+29  : 0002 5000 : 13FC 00F0 0006 : INICIO		MOVE.B	#$F0,DDRA	
+                : 0027 
+30  : 0002 5008 : 103C 0000      : 		MOVE.B	#0,D0		
+31  : 0002 500C : 123C 0000      : 		MOVE.B	#0,D1		
+32  : 0002 5010 :                : 
+33  : 0002 5010 :                : 
+34  : 0002 5010 : 1039 0006 0023 : BUCLE_WHILE	MOVE.B	ORA,D0	  *Leo el estado actual de los interruptores(4 bis menos significativos)	
+35  : 0002 5016 : E958           : 	        ROL #4,D0   
+36  : 0002 5018 : 0C00 0000      : 	        CMP.B	#0,D0	  *Comparo si los interruptores estan a cero 	
+37  : 0002 501C : 6700 0010      : 		BEQ	FIN_PROGRAMA *Si los interruptores estan a cero acaba el programa	
+38  : 0002 5020 : B240           : 		CMP	D0,D1	  *comparamos estado actual y anterior 	
+39  : 0002 5022 : 67EC           : 		BEQ	BUCLE_WHILE
+40  : 0002 5024 :                : 		
+41  : 0002 5024 : 1200           : 		MOVE.B	D0,D1     *Muevo estado actual de interruptores a D1		
+42  : 0002 5026 : 13C1 0006 0023 : 		MOVE.B  D1,ORA    *
+
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 2  
+
+  
+
+43  : 0002 502C :                : 		
+44  : 0002 502C : 60E2           : 		BRA	BUCLE_WHILE		
+45  : 0002 502E :                : 
+46  : 0002 502E : 13FC 0000 0006 : FIN_PROGRAMA	MOVE.B	#$00,ORA	
+                : 0023 
+47  : 0002 5036 : 4E72 2000      : 		STOP	#$2000		
+48  : 0002 503A :                : 
+49  : 0002 503A :                :          	END		
+
+   Lineas ensambladas:    49   Errores: 0
+
+	      ENSAMBLADOR CRUZADO PARA 68000       		P gina : 3  
+
+  
+TABLA DE SIMBOLOS:
+
+
+ACR             : 0006 0037 : LOCAL ABSOLUTA
+BUCLE_WHILE     : 0002 5010 : LOCAL REUBICABLE
+DDRA            : 0006 0027 : LOCAL ABSOLUTA
+DDRB            : 0006 0025 : LOCAL ABSOLUTA
+FIN_PROGRAMA    : 0002 502E : LOCAL REUBICABLE
+IER             : 0006 003D : LOCAL ABSOLUTA
+IFR             : 0006 003B : LOCAL ABSOLUTA
+INICIO          : 0002 5000 : LOCAL REUBICABLE
+ORA             : 0006 0023 : LOCAL ABSOLUTA
+ORAE            : 0006 003F : LOCAL ABSOLUTA
+ORB             : 0006 0021 : LOCAL ABSOLUTA
+PCR             : 0006 0039 : LOCAL ABSOLUTA
+SR              : 0006 0035 : LOCAL ABSOLUTA
+T1CH            : 0006 002B : LOCAL ABSOLUTA
+T1CL            : 0006 0029 : LOCAL ABSOLUTA
+T1LH            : 0006 002F : LOCAL ABSOLUTA
+T1LL            : 0006 002D : LOCAL ABSOLUTA
+T2CH            : 0006 0033 : LOCAL ABSOLUTA
+T2LL            : 0006 0031 : LOCAL ABSOLUTA
+VIA_2           : 0006 0021 : LOCAL ABSOLUTA
+
